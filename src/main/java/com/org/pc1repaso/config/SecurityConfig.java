@@ -67,7 +67,7 @@ public class SecurityConfig {
                         manager -> manager.sessionCreationPolicy(STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/auth/**","/users/**","/flights/create","/error","/login").permitAll()
+                    .requestMatchers("/auth/**","/users/**","/flights/create","/error","/login","/cleanup").permitAll()
                     .requestMatchers("/flights/**").authenticated()
                         .anyRequest().authenticated()
                 )

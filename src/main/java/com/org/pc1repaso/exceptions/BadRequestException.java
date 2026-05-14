@@ -1,16 +1,16 @@
 package com.org.pc1repaso.exceptions;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class BadRequestException extends RuntimeException{
-    private final String errorCode;
-
-    public BadRequestException(String mensaje, String errorCode){
+    public BadRequestException(String mensaje){
         super(mensaje);
-        this.errorCode = errorCode;
     }
 	
 }

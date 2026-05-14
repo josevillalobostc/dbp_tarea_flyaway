@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,6 +31,9 @@ public class User implements UserDetails {
     private String name;
 
     private String password;
+
+    @OneToMany(mappedBy = "user")
+    private List<Booking> bookings;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {    

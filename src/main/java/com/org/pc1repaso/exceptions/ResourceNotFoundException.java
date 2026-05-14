@@ -6,11 +6,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ResourceNotFoundException extends RuntimeException {
-    private final String errorCode;
 
-    public ResourceNotFoundException(String mensaje, String errorCode){
+    public ResourceNotFoundException(String mensaje){
         super(mensaje);
-        this.errorCode = errorCode;
     }
 
 	

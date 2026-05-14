@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserRequestDTO {
-    private Long id;
+
 
     @Email
     private String email;
