@@ -49,10 +49,16 @@ public class FlightController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/book/{id}")
-    public ResponseEntity<BookingResponseDTO> reservarVuelo(@PathVariable Long id){
-        BookingResponseDTO response = flightService.reservarVuelo(id);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    @PostMapping("/book")
+    public ResponseEntity<BookingResponseDTO> reservarVuelo(@RequestBody @Valid BookingResponseDTO request){
+        BookingResponseDTO response = flightService.reservarVuelo(request.getFlightId());
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("book/{id}")
+    public ResponseEntity<BookingResponseDTO> verVuelo(@PathVariable Long id){
+        BookingResponseDTO response = flightService.getBooking(id);
+        return ResponseEntity.ok(response);
     }
     
 }

@@ -1,6 +1,5 @@
 package com.org.pc1repaso.service;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService{
     private final UserRepository userRepository;
-    private final ModelMapper modelMapper;
 
     @Override
         public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

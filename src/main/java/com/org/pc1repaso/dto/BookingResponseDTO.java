@@ -9,6 +9,8 @@ import lombok.Data;
 public class BookingResponseDTO {
     private Long id;
     private LocalDateTime bookingDate;
+    private LocalDateTime  estDepartureTime;
+    private LocalDateTime  estArrivalTime;
 	private Long flightId;
 	private String flightNumber;
 	private Long customerId;

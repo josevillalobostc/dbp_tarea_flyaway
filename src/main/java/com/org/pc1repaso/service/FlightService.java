@@ -76,27 +76,36 @@ public class FlightService {
         
         List<Booking> bookings = bookingRepository.findByUserId(userId);
         for(Booking book : bookings){
-            if(vuelo.getEstDepartureTime().isBefore(vuelo.getEstArrivalTime()) && 
-                vuelo.getEstArrivalTime().isAfter(vuelo.getEstDepartureTime())
+            if(vuelo.getEstDepartureTime().isBefore(book.getFlightLlegada()) && 
+                book.getFlightSalida().isAfter(vuelo.getEstDepartureTime())
             ) {throw new BadRequestException("Conflico de horarios con la reserva " + book.getId());}
-        }
-                
+        }                
+        Booking newBooking = new Booking();
         vuelo.setAvailableSeats(vuelo.getAvailableSeats() - 1);
         flightRepository.save(vuelo);
-        Booking newBooking = new Booking();
         newBooking.setFlight(vuelo);
         newBooking.setUser(userRepository.findById(userId).orElseThrow());
-        
+        newBooking.setBookingDate(LocalDateTime.now());
         
         Booking booking = bookingRepository.save(newBooking);
-        BookingResponseDTO response = new BookingResponseDTO();
-        response.setId(booking.getId());
-        response.setBookingDate(LocalDateTime.now());
-        response.setFlightId(vuelo.getId());
-        response.setFlightNumber(vuelo.getFlightNumber());
+        BookingResponseDTO response = modelMapper.map(booking, BookingResponseDTO.class);
         response.setCustomerId(userId);
         response.setCustomerFirstName(userFirstName);
         response.setCustomerLastName(userLastName);
+        response.setEstArrivalTime(vuelo.getEstArrivalTime());
+        response.setEstDepartureTime(vuelo.getEstDepartureTime());
+        return response;
+    }
+
+    public BookingResponseDTO getBooking(Long id){
+        Booking booking = bookingRepository.findById(id)
+            .orElseThrow(() -> new BadRequestException("No existe una reserva con dicho id"));
+        BookingResponseDTO response = modelMapper.map(booking, BookingResponseDTO.class);
+        response.setCustomerId(booking.getUser().getId());
+        response.setCustomerFirstName(booking.getUser().getFirstName());
+        response.setCustomerLastName(booking.getUser().getLastName());
+        response.setEstArrivalTime(booking.getFlight().getEstArrivalTime());
+        response.setEstDepartureTime(booking.getFlight().getEstDepartureTime());
         return response;
     }
     

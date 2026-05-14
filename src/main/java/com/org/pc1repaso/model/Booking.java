@@ -15,6 +15,8 @@ public class Booking {
     @Id
     @GeneratedValue
     private Long id;
+
+    private LocalDateTime bookingDate;
     
     @ManyToOne
     @JoinColumn(name = "flight_id")
