@@ -15,7 +15,10 @@ public class UserRequestDTO {
     private String email;
 
     @Pattern(regexp = "(.*[A-Z]).*",message = "Debe contener una mayúscula")
-    private String name;
+    private String firstName;
+
+    @Pattern(regexp = "(.*[A-Z]).*",message = "Debe contener una mayúscula")
+    private String lastName;
 
     @Size(min=8)
     @Pattern(regexp = "(.*[0-9]).*", message = "Debe contener un número")

@@ -13,9 +13,9 @@ import lombok.Setter;
 @NoArgsConstructor
 public class FlightResponseDTO {
     private Long id;
-    private String aerolinea;
-    private String numeroVuelo;
-    private LocalDateTime horaSalida;
-    private LocalDateTime horaLlegada;
-    private Integer asientos;
+    private String airlineName;
+    private String flightNumber;
+    private LocalDateTime estDepartureTime;
+    private LocalDateTime estArrivalTime;
+    private Integer availableSeats;
 }

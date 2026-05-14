@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,6 +21,7 @@ import com.org.pc1repaso.dto.FlightRequestDTO;
 import com.org.pc1repaso.dto.FlightResponseDTO;
 import com.org.pc1repaso.service.FlightService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -32,7 +32,7 @@ public class FlightController {
 
     @PreAuthorize("permitAll()")
     @PostMapping("/create")
-    public ResponseEntity<FlightResponseDTO> crearVuelo(@RequestBody FlightRequestDTO vuelo){
+    public ResponseEntity<FlightResponseDTO> crearVuelo(@RequestBody @Valid FlightRequestDTO vuelo){
         FlightResponseDTO nuevovuelo = flightService.createVuelo(vuelo);
         return ResponseEntity.ok(nuevovuelo);
     }

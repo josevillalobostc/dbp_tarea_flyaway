@@ -1,14 +1,12 @@
 package com.org.pc1repaso.service;
 
 
-import java.net.http.HttpRequest;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -36,10 +34,10 @@ public class FlightService {
     
     public FlightResponseDTO createVuelo(FlightRequestDTO request){
         Flight vuelo = modelMapper.map(request, Flight.class);
-        if(vuelo.getHoraSalida().isAfter(vuelo.getHoraLlegada())){
+        if(vuelo.getEstDepartureTime().isAfter(vuelo.getEstArrivalTime())){
             throw new BadRequestException("La fecha de llegada debe ser luego de la fecha de salida.");
         }
-        vuelo.setAsientosDisponibles(vuelo.getAsientos());
+        vuelo.setAvailableSeats(vuelo.getSeats());
         Flight nuevovuelo = flightRepository.save(vuelo);
         FlightResponseDTO elnuevo = modelMapper.map(nuevovuelo, FlightResponseDTO.class);
         return elnuevo;        
@@ -49,26 +47,27 @@ public class FlightService {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User usuario = (User) auth.getPrincipal();
         Long userId = usuario.getId();
-        String userName = usuario.getName();
+        String userFirstName = usuario.getFirstName();
+        String userLastName = usuario.getLastName();
         
         Flight vuelo = flightRepository.findById(id)
         .orElseThrow(() -> new BadRequestException("No existe dicho id de vuelo."));
 
-        if(vuelo.getHoraLlegada().isBefore(LocalDateTime.ofInstant(Instant.now(),ZoneId.systemDefault()))){
+        if(vuelo.getEstArrivalTime().isBefore(LocalDateTime.ofInstant(Instant.now(),ZoneId.systemDefault()))){
             throw new BadRequestException("Dicho vuelo está en curso o ya finalizó.");
         }
-        if(vuelo.getAsientosDisponibles() < 1){
+        if(vuelo.getAvailableSeats() < 1){
             throw new BadRequestException("Dicho vuelo ya no tiene asientos.");
         }
         
         List<Booking> bookings = bookingRepository.findByUserId(userId);
         for(Booking book : bookings){
-            if(vuelo.getHoraSalida().isBefore(vuelo.getHoraLlegada()) && 
-                vuelo.getHoraLlegada().isAfter(vuelo.getHoraSalida())
+            if(vuelo.getEstDepartureTime().isBefore(vuelo.getEstArrivalTime()) && 
+                vuelo.getEstArrivalTime().isAfter(vuelo.getEstDepartureTime())
             ) {throw new BadRequestException("Conflico de horarios con la reserva " + book.getId());}
         }
                 
-        vuelo.setAsientosDisponibles(vuelo.getAsientosDisponibles() - 1);
+        vuelo.setAvailableSeats(vuelo.getAvailableSeats() - 1);
         flightRepository.save(vuelo);
         Booking newBooking = new Booking();
         newBooking.setFlight(vuelo);
@@ -76,10 +75,14 @@ public class FlightService {
         
         
         Booking booking = bookingRepository.save(newBooking);
-        BookingResponseDTO response = modelMapper.map(booking,BookingResponseDTO.class);
-        response.setUserName(userName);
-        response.setHoraSalida(vuelo.getHoraSalida());
-        response.setHoraLlegada(vuelo.getHoraLlegada());
+        BookingResponseDTO response = new BookingResponseDTO();
+        response.setId(booking.getId());
+        response.setBookingDate(LocalDateTime.now());
+        response.setFlightId(vuelo.getId());
+        response.setFlightNumber(vuelo.getFlightNumber());
+        response.setCustomerId(userId);
+        response.setCustomerFirstName(userFirstName);
+        response.setCustomerLastName(userLastName);
         return response;
     }
     

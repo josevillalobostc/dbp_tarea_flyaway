@@ -12,7 +12,6 @@ import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Entity
@@ -26,14 +25,14 @@ public class Flight {
     private Long id;
 
     @Column(unique = true, nullable = false)
-    private String numeroVuelo;
-    private String aerolinea;
+    private String flightNumber;
+    private String airlineName;
 
-    private LocalDateTime horaSalida;
-    private LocalDateTime horaLlegada;
+    private LocalDateTime estDepartureTime;
+    private LocalDateTime estArrivalTime;
 
-    private Integer asientos;
-    private Integer asientosDisponibles;
+    private Integer seats;
+    private Integer availableSeats;
 
     @OneToMany(mappedBy = "flight")
     private List<Booking> bookings;

@@ -2,7 +2,6 @@ package com.org.pc1repaso.exceptions;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter

@@ -14,7 +14,7 @@ import lombok.Data;
 public class Booking {
     @Id
     @GeneratedValue
-    Long id;
+    private Long id;
     
     @ManyToOne
     @JoinColumn(name = "flight_id")
@@ -25,10 +25,10 @@ public class Booking {
     private User user;
 
     public LocalDateTime getFlightSalida(){
-        return flight.getHoraSalida();
+        return flight.getEstDepartureTime();
     }
 
     public LocalDateTime getFlightLlegada(){
-        return flight.getHoraLlegada();
+        return flight.getEstArrivalTime();
     }
 }
