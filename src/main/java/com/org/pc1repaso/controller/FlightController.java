@@ -2,7 +2,6 @@ package com.org.pc1repaso.controller;
 
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -34,7 +33,7 @@ public class FlightController {
     @PostMapping("/create")
     public ResponseEntity<FlightResponseDTO> crearVuelo(@RequestBody @Valid FlightRequestDTO vuelo){
         FlightResponseDTO nuevovuelo = flightService.createVuelo(vuelo);
-        return ResponseEntity.ok(nuevovuelo);
+        return ResponseEntity.status(HttpStatus.CREATED).body(nuevovuelo);
     }
 
     @GetMapping("/search")
@@ -46,13 +45,8 @@ public class FlightController {
     @RequestParam(required = false) LocalDateTime hasta
     ) 
     {
-        Long id = 44L;
-        LocalDateTime salida = LocalDateTime.now();
-        LocalDateTime llegada = LocalDateTime.now();
-        FlightResponseDTO responsePrueba = new FlightResponseDTO(id,"Avon","123-aa",salida,llegada,200);
-        List<FlightResponseDTO> responseVuelo = new ArrayList<>();
-        responseVuelo.add(responsePrueba);
-        return ResponseEntity.ok(responseVuelo);
+        List<FlightResponseDTO> response = flightService.buscarVuelos(numeroVuelo, aerolinea, desde, hasta);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/book/{id}")

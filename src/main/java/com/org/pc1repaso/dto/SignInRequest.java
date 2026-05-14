@@ -1,6 +1,9 @@
 package com.org.pc1repaso.dto;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,6 +11,12 @@ import lombok.Setter;
 @Setter
 public class SignInRequest {
     @Email(message = "Debe ser un correo válido")
+    @NotBlank
 	private String email;	
+
+	@NotBlank
+    @Size(min=8, message = "Debe tener como mínimo 8 carácteres")
+    @Pattern(regexp = "(.*[0-9]).*", message = "Debe contener un número")
+    @Pattern(regexp = "(.*[A-Z]).*", message = "Debe contener una letra mayúscula")
 	private String password;
 }

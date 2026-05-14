@@ -4,6 +4,7 @@ package com.org.pc1repaso.exceptions;
 
 
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ProblemDetail;
 
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -27,6 +28,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({BadRequestException.class})
     public ProblemDetail
     handleBadRequest(BadRequestException ex) {
+        ProblemDetail problemDetail = ProblemDetail.forStatus(400);
+        problemDetail.setTitle("Bad request");
+        problemDetail.setDetail(ex.getMessage());        
+        return problemDetail;
+    }
+    @ExceptionHandler({DataIntegrityViolationException.class})
+    public ProblemDetail
+    handleDataViolation(DataIntegrityViolationException ex){
         ProblemDetail problemDetail = ProblemDetail.forStatus(400);
         problemDetail.setTitle("Bad request");
         problemDetail.setDetail(ex.getMessage());        

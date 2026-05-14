@@ -7,10 +7,12 @@ import java.time.ZoneId;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.org.pc1repaso.compontents.FlightSpecifications;
 import com.org.pc1repaso.dto.BookingResponseDTO;
 import com.org.pc1repaso.dto.FlightRequestDTO;
 import com.org.pc1repaso.dto.FlightResponseDTO;
@@ -37,10 +39,22 @@ public class FlightService {
         if(vuelo.getEstDepartureTime().isAfter(vuelo.getEstArrivalTime())){
             throw new BadRequestException("La fecha de llegada debe ser luego de la fecha de salida.");
         }
-        vuelo.setAvailableSeats(vuelo.getSeats());
         Flight nuevovuelo = flightRepository.save(vuelo);
         FlightResponseDTO elnuevo = modelMapper.map(nuevovuelo, FlightResponseDTO.class);
         return elnuevo;        
+    }
+
+    public List<FlightResponseDTO> buscarVuelos(
+        String numeroVuelo, String aerolinea, LocalDateTime desde, LocalDateTime hasta
+    ) {
+        Specification<Flight> spec = Specification
+                .where(FlightSpecifications.hasNumeroVuelo(numeroVuelo))
+                .and(FlightSpecifications.hasAerolinea(aerolinea))
+                .and(FlightSpecifications.isBetweenDates(desde, hasta));
+    
+        return flightRepository.findAll(spec).stream()
+                .map(flight -> modelMapper.map(flight, FlightResponseDTO.class))
+                .toList();
     }
 
     public BookingResponseDTO reservarVuelo(Long id){

@@ -31,7 +31,6 @@ public class Flight {
     private LocalDateTime estDepartureTime;
     private LocalDateTime estArrivalTime;
 
-    private Integer seats;
     private Integer availableSeats;
 
     @OneToMany(mappedBy = "flight")
